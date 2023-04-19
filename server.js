@@ -23,7 +23,7 @@ io.on("connection", (socket) => {
 
   socket.on("message", (data) => {
     // watchman emits to everyone
-    io.emit("message", datas);
+    io.emit("message", data);
     console.log("Message is being sent to everyone", data.message);
   });
 

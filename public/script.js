@@ -2,7 +2,7 @@
 const socket = io();
 
 let username = "";
-
+const proExit = document.getElementById("ext-btn")
 document.getElementById("join-btn").addEventListener("click", (event) => {
   event.preventDefault();
 
@@ -10,9 +10,8 @@ document.getElementById("join-btn").addEventListener("click", (event) => {
   if (username.trim() != "") {
     document.querySelector(".form-username").style.display = "none";
     document.querySelector(".chatroom-container").style.display = "block";
-    document.querySelector(
-      ".chatroom-header"
-    ).innerText = `Chatroom - ${username}`;
+    document.querySelector(".chatroom-header").innerHTML = `Chatroom - ${username}`;
+    document.querySelector(".chatroom-header").appendChild(proExit)
 
     socket.emit("username enter", username);
   } else {
@@ -38,7 +37,8 @@ document.getElementById("send-btn").addEventListener("click", (event) => {
 socket.on("username enter", (data) => {
   if (data !== username) {
     var msgDiv = document.createElement("div");
-    msgDiv.innerText = `${data} has enterred!`;
+    msgDiv.style.textAlign = "center";
+    msgDiv.innerText = `${data} has joined!`;
     document.querySelector("#messages-container").appendChild(msgDiv);
   }
 });
@@ -64,9 +64,19 @@ function addMessage(data, flag) {
 
 // function if some sender sends a message , receive that message and append  child
 
-document.getElementById("exit-btn").addEventListener("click", () => {
+document.getElementById("left-btn").addEventListener("click", () => {
   socket.emit("username left", username);
+  // document.querySelector(".form-username").style.display = "block";
+  // document.querySelector(".chatroom-container").style.display = "none";
 });
+
+// Proper Exit From Chatroom to the Home
+document.getElementById("ext-btn").addEventListener("click", () => {
+  socket.emit("username left", username);
+  document.querySelector(".form-username").style.display = "block";
+  document.querySelector(".chatroom-container").style.display = "none";
+});
+
 
 // receive message
 socket.on("username left", (data) => {
